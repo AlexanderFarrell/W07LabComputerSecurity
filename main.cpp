@@ -73,7 +73,7 @@ void arcExploit(/* feel free to add parameters */)
  *************************************/
 //Hint: You will need two classes to do this: a base class and a derived class.
 //Hint: For extra credit, can you demonstrate VTable Smashing?
-class Vulnerability{
+class vTableVulnerability{
 
 };
 
