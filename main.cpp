@@ -1,4 +1,7 @@
 #include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 /*************************************
  * ARRAY VULNERABILTY
@@ -6,9 +9,26 @@
  * 2. The array index variable must be reachable through external input.
  * 3. There must not be bounds checking on the array index variable.
  ****************************************/
-void arrayVulnerability(/* feel free to add parameters */)
+void arrayVulnerability(int selection)
 {
+    int cartQuantities[3];
+    cartQuantities[0] = 5;
+    cartQuantities[1] = 2;
+    cartQuantities[2] = 10;
 
+    string cartNames[3];
+    cartNames[0] = "Apples";
+    cartNames[1] = "Oranges";
+    cartNames[2] = "Bananas";
+
+    //Remove item
+    cartQuantities[selection] -= 1;
+    cout << " -- There are now " << cartQuantities[selection] << " " << cartNames[selection] << endl;
+}
+
+void arrayWorking(/* feel free to add parameters */){
+    cout << setw(20) << "Called arrayWorking()";
+    arrayVulnerability(2);
 }
 
 /**************************************
@@ -21,7 +41,8 @@ void arrayVulnerability(/* feel free to add parameters */)
  *************************************/
 void arrayExploit()
 {
-    arrayVulnerability(/* parameters with malicious data */);
+    cout << setw(20) << "Called arrayExploit()" << endl;
+    arrayVulnerability(5);
 }
 
 /**************************************
@@ -29,8 +50,20 @@ void arrayExploit()
  *
  *************************************/
 //Hint: This may look something like last week's assignment.
-void arcInjection(/* feel free to add parameters */)
+void arcVulnerability(/* feel free to add parameters */)
 {
+
+}
+
+void arcWorking(/* feel free to add parameters */)
+{
+    cout << setw(20) << "Called arcWorking()" << endl;
+
+}
+
+void arcExploit(/* feel free to add parameters */)
+{
+    cout << setw(20) << "Called arcExploit()" << endl;
 
 }
 
@@ -42,14 +75,15 @@ void arcInjection(/* feel free to add parameters */)
 //Hint: For extra credit, can you demonstrate VTable Smashing?
 class Vulnerability{
 
-
 };
 
 void vtableWorking(/* feel free to add parameters */){
+    cout << setw(20) << "Called vtableWorking()";
 
 }
 
 void vTableExploit(/* feel free to add parameters */){
+    cout << setw(20) << "Called vTableExploit()";
 
 }
 
@@ -68,10 +102,12 @@ void stackVulnerability(){
 }
 
 void stackWorking(){
+    cout << setw(20) << "Called stackWorking()";
 
 }
 
 void stackExploit(){
+    cout << setw(20) << "Called stackExploit()";
 
 }
 
@@ -84,10 +120,12 @@ void heapVulnerability(/* feel free to add parameters */){
 }
 
 void heapWorking(/* feel free to add parameters */){
+    cout << setw(20) << "Called heapWorking()";
 
 }
 
 void heapExploit(/* feel free to add parameters */){
+    cout << setw(20) << "Called heapExploit()";
 
 }
 
@@ -100,10 +138,12 @@ void intVulnerability(/* feel free to add parameters */){
 }
 
 void integarWorking(/* feel free to add parameters */){
+    cout << setw(20) << "Called integarWorking()";
 
 }
 
 void intExploit(/* feel free to add parameters */){
+    cout << setw(20) << "Called intExploit()";
 
 }
 
@@ -116,10 +156,12 @@ void ansiUnicode(/* feel free to add parameters */){
 }
 
 void ansiWorking(/* feel free to add parameters */){
+    cout << setw(20) << "Called ansiWorking()";
 
 }
 
 void ansiExploit(/* feel free to add parameters */){
+    cout << setw(20) << "Called ansiExploit()";
 
 }
 
@@ -129,4 +171,6 @@ void ansiExploit(/* feel free to add parameters */){
  *************************************/
 int main() {
 
+    arrayWorking();
+    arrayExploit();
 }
