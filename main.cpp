@@ -27,7 +27,7 @@ void arrayVulnerability(int selection)
 }
 
 void arrayWorking(/* feel free to add parameters */){
-    cout << setw(20) << "Called arrayWorking()";
+    cout << setw(30) << "Called arrayWorking()";
     arrayVulnerability(2);
 }
 
@@ -41,7 +41,7 @@ void arrayWorking(/* feel free to add parameters */){
  *************************************/
 void arrayExploit()
 {
-    cout << setw(20) << "Called arrayExploit()" << endl;
+    cout << setw(30) << "Called arrayExploit()";
     arrayVulnerability(5);
 }
 
@@ -57,13 +57,13 @@ void arcVulnerability(/* feel free to add parameters */)
 
 void arcWorking(/* feel free to add parameters */)
 {
-    cout << setw(20) << "Called arcWorking()" << endl;
+    cout << setw(30) << "Called arcWorking()";
 
 }
 
 void arcExploit(/* feel free to add parameters */)
 {
-    cout << setw(20) << "Called arcExploit()" << endl;
+    cout << setw(30) << "Called arcExploit()";
 
 }
 
@@ -78,12 +78,12 @@ class Vulnerability{
 };
 
 void vtableWorking(/* feel free to add parameters */){
-    cout << setw(20) << "Called vtableWorking()";
+    cout << setw(30) << "Called vtableWorking()";
 
 }
 
 void vTableExploit(/* feel free to add parameters */){
-    cout << setw(20) << "Called vTableExploit()";
+    cout << setw(30) << "Called vTableExploit()";
 
 }
 
@@ -102,12 +102,12 @@ void stackVulnerability(){
 }
 
 void stackWorking(){
-    cout << setw(20) << "Called stackWorking()";
+    cout << setw(30) << "Called stackWorking()";
 
 }
 
 void stackExploit(){
-    cout << setw(20) << "Called stackExploit()";
+    cout << setw(30) << "Called stackExploit()";
 
 }
 
@@ -120,12 +120,12 @@ void heapVulnerability(/* feel free to add parameters */){
 }
 
 void heapWorking(/* feel free to add parameters */){
-    cout << setw(20) << "Called heapWorking()";
+    cout << setw(30) << "Called heapWorking()";
 
 }
 
 void heapExploit(/* feel free to add parameters */){
-    cout << setw(20) << "Called heapExploit()";
+    cout << setw(30) << "Called heapExploit()";
 
 }
 
@@ -138,12 +138,12 @@ void intVulnerability(/* feel free to add parameters */){
 }
 
 void integarWorking(/* feel free to add parameters */){
-    cout << setw(20) << "Called integarWorking()";
+    cout << setw(30) << "Called integarWorking()";
 
 }
 
 void intExploit(/* feel free to add parameters */){
-    cout << setw(20) << "Called intExploit()";
+    cout << setw(30) << "Called intExploit()";
 
 }
 
@@ -156,12 +156,12 @@ void ansiUnicode(/* feel free to add parameters */){
 }
 
 void ansiWorking(/* feel free to add parameters */){
-    cout << setw(20) << "Called ansiWorking()";
+    cout << setw(30) << "Called ansiWorking()";
 
 }
 
 void ansiExploit(/* feel free to add parameters */){
-    cout << setw(20) << "Called ansiExploit()";
+    cout << setw(30) << "Called ansiExploit()";
 
 }
 
