@@ -151,17 +151,30 @@ void intExploit(/* feel free to add parameters */){
  * ANSI-UNICODE CONVERSION
  *
  *************************************/
-void ansiUnicode(/* feel free to add parameters */){
-
+void ansiUnicode(int passwordLength){
+    string realPasswordLength = "This is a test";
+    if (realPasswordLength.size() == passwordLength){
+        cout << "Password matches" << endl;
+    }
+    else{
+        cout << "wrong password"  << endl;
+    }
 }
 
-void ansiWorking(/* feel free to add parameters */){
+void ansiWorking(){
     cout << setw(30) << "Called ansiWorking()";
-
+    // this will check for number of elements
+    string testing1 = "this is a test";
+    ansiUnicode(testing1.length());
 }
 
-void ansiExploit(/* feel free to add parameters */){
+void ansiExploit(){
     cout << setw(30) << "Called ansiExploit()";
+    // This checks by the size of buffer
+    
+    string testing2 = "this is a test";
+     
+    ansiUnicode(sizeof(testing2));
 
 }
 
@@ -173,4 +186,6 @@ int main() {
 
     arrayWorking();
     arrayExploit();
+    ansiWorking();
+    ansiExploit();
 }
