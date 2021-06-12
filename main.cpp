@@ -1,5 +1,8 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
+#include <cstring>
+#include <string>
 
 using namespace std;
 
@@ -21,9 +24,11 @@ void arrayVulnerability(int selection)
     cartNames[1] = "Oranges";
     cartNames[2] = "Bananas";
 
+
     //Remove item
     cartQuantities[selection] -= 1;
-    cout << " -- There are now " << cartQuantities[selection] << " " << cartNames[selection] << endl;
+    //Substr added for convenience, as it prints super long otherwise!
+    cout << " -- There are now " << cartQuantities[selection] << " " << cartNames[selection].substr(0, 60) << endl;
 }
 
 void arrayWorking(/* feel free to add parameters */){
@@ -47,24 +52,86 @@ void arrayExploit()
 
 /**************************************
  * ARC INJECTION
- *
+ *  1.  There must be a function pointer used in the code.
+ *  2.  Through some vulnerability, there must be a way for user input to overwrite the function pointer. This
+ *         typically happens through a stack buffer vulnerability.
+ *  3.  After the memory is overwritten, the function pointer must be dereferenced.
  *************************************/
+void help(){
+    cout << setw(30) <<"Command " << "- quit - Quits \n";
+    cout << setw(30) <<"quit " << " - Quit app \n";
+    cout << setw(30) <<"info " << " - Gets info on app \n";
+}
+void quit(){
+    cout << "Quitting!";
+}
+void info (){
+    cout << "This is an application";
+}
+void invalid (){
+    cout << "Not a valid selection";
+}
+void dangerous(){
+    cout << "Dangerous Called. Should not be called from selections";
+}
+typedef void(*func)();
 //Hint: This may look something like last week's assignment.
-void arcVulnerability(/* feel free to add parameters */)
+void arcVulnerability(istringstream iss)
 {
+    //The above code is caught by the debugger, and mitigated. It is similar to the example in the book. It may appear
+    // this was a vulnerability at one point in C++'s history, but modern c++ runtimes catch it.
 
+    /*char selection[1];
+    auto command = invalid;
+    iss >> selection[1];*/
+
+    //Because of this, a different and more blatant vulnerability is written, simulating the above code on the heap.
+
+    char * data = new char[9];
+    *((long*)(data + 1)) = (long)invalid;
+    string strTmp;
+    iss >> strTmp;
+    data = strTmp.data();
+
+    char selection[1];
+    auto command = *((func *)&data[1]);
+    selection[0] = data[0];
+
+    switch (selection[0]) {
+        case 'q':
+            command = quit;
+            break;
+        case 'i':
+            command = info;
+            break;
+        case 'h':
+            command = help;
+            break;
+        default:
+            break;
+    }
+
+    command();
+    cout << endl;
 }
 
-void arcWorking(/* feel free to add parameters */)
+void arcWorking()
 {
-    cout << setw(30) << "Called arcWorking()";
-
+    cout << setw(30) << "Called arcWorking()" << endl;
+    arcVulnerability(istringstream("h"));
 }
 
 void arcExploit(/* feel free to add parameters */)
 {
-    cout << setw(30) << "Called arcExploit()";
+    cout << setw(30) << "Called arcExploit()" << endl;
+    string s(".........");// = new char[9];
+    char * c = reinterpret_cast<char *>(&s.at(0));
+    long * l = reinterpret_cast<long *>(&s.at(1));
 
+    *c = 'u';
+    *l = (long)dangerous;
+
+    arcVulnerability(istringstream(s));
 }
 
 /**************************************
@@ -195,9 +262,18 @@ void ansiExploit(){
  *
  *************************************/
 int main() {
-
     arrayWorking();
     arrayExploit();
+    /*try {
+        arrayWorking();
+        arrayExploit();
+    } catch (exception e) {
+        cout << e.what();
+    }*/
+
+    arcWorking();
+    arcExploit();
+
     ansiWorking();
     ansiExploit();
 }
