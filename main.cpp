@@ -133,17 +133,29 @@ void heapExploit(/* feel free to add parameters */){
  * HEAP SPRAYING
  *
  *************************************/
-void intVulnerability(/* feel free to add parameters */){
-
+void intVulnerability(int numberInArray){
+    // This give us some bounds that we need to disrupt as per the assignment this is holding credit cards and the corresponding accounts
+    // Let's image they are filled up.
+    char creditcard[254] = {"1"};
+    char account[254] = {"j"};
+    
+    // We take the user input and use it to the corresponding account and credit card number
+    cout << creditcard[numberInArray] << endl;
+    cout << account[numberInArray] << endl;
+    
 }
 
-void integarWorking(/* feel free to add parameters */){
+void integarWorking(){
     cout << setw(30) << "Called integarWorking()";
+    // This will return a 1 and a J
+    intVulnerability(0);
 
 }
 
 void intExploit(/* feel free to add parameters */){
     cout << setw(30) << "Called intExploit()";
+    // This returns a random integer
+    intVulnerability(256);
 
 }
 
@@ -151,6 +163,8 @@ void intExploit(/* feel free to add parameters */){
  * ANSI-UNICODE CONVERSION
  *
  *************************************/
+
+// Get this where the number we loop on is the one received. The size off will ruin it.ß
 void ansiUnicode(int passwordLength){
     string realPasswordLength = "This is a test";
     if (realPasswordLength.size() == passwordLength){
@@ -164,16 +178,14 @@ void ansiUnicode(int passwordLength){
 void ansiWorking(){
     cout << setw(30) << "Called ansiWorking()";
     // this will check for number of elements
-    string testing1 = "this is a test";
+    string testing1 = "This is a test";
     ansiUnicode(testing1.length());
 }
 
 void ansiExploit(){
     cout << setw(30) << "Called ansiExploit()";
-    // This checks by the size of buffer
-    
-    string testing2 = "this is a test";
-     
+    string testing2 = "This is a test";
+     // By using the sizeof, we aren't chekcing the length like we're supposed to
     ansiUnicode(sizeof(testing2));
 
 }
