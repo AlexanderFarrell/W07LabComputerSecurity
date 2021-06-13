@@ -28,11 +28,11 @@ void arrayVulnerability(int selection)
     //Remove item
     cartQuantities[selection] -= 1;
     //Substr added for convenience, as it prints super long otherwise!
-    cout << " -- There are now " << cartQuantities[selection] << " " << cartNames[selection].substr(0, 60) << endl;
+    cout << "\nThere are now " << cartQuantities[selection] << " " << cartNames[selection].substr(0, 60) << endl;
 }
 
 void arrayWorking(/* feel free to add parameters */){
-    cout << setw(30) << "Called arrayWorking()";
+    cout << setw(30) << "\n -- Called arrayWorking()";
     arrayVulnerability(2);
 }
 
@@ -46,7 +46,7 @@ void arrayWorking(/* feel free to add parameters */){
  *************************************/
 void arrayExploit()
 {
-    cout << setw(30) << "Called arrayExploit()";
+    cout << setw(30) << "\n -- Called arrayExploit()";
     arrayVulnerability(5);
 }
 
@@ -78,7 +78,7 @@ typedef void(*func)();
 //Hint: This may look something like last week's assignment.
 void arcVulnerability(istringstream iss)
 {
-    //The above code is caught by the debugger, and mitigated. It is similar to the example in the book. It may appear
+    //The below code is caught by the debugger, and mitigated. It is similar to the example in the book. It may appear
     // this was a vulnerability at one point in C++'s history, but modern c++ runtimes catch it.
 
     /*char selection[1];
@@ -117,13 +117,19 @@ void arcVulnerability(istringstream iss)
 
 void arcWorking()
 {
-    cout << setw(30) << "Called arcWorking()" << endl;
-    arcVulnerability(istringstream("h"));
+    cout << setw(30) << "\n -- Called arcWorking()" << endl;
+    arcVulnerability(istringstream("i"));
 }
 
+/**************************************
+ * ARC INJECTION
+ *  1. The attacker must exploit a vulnerability allowing unintended access to the function pointer.
+ *  2. The attacker must have the address to another function which is to be used to replace the existing
+ *         function pointer.
+ *************************************/
 void arcExploit(/* feel free to add parameters */)
 {
-    cout << setw(30) << "Called arcExploit()" << endl;
+    cout << setw(30) << "\n -- Called arcExploit()" << endl;
     string s(".........");// = new char[9];
     char * c = reinterpret_cast<char *>(&s.at(0));
     long * l = reinterpret_cast<long *>(&s.at(1));
@@ -136,22 +142,53 @@ void arcExploit(/* feel free to add parameters */)
 
 /**************************************
  * VTABLE SPRAYING
- *
+ *For a V-Table smashing vulnerability to exist in the code, the following must be present:
+ * 1. The vulnerable class must be polymorphic.
+ * 2. The class must have a buffer as a member variable.
+ * 3. Through some vulnerability, there must be a way for user input to overwrite parts of the V-Table.
  *************************************/
 //Hint: You will need two classes to do this: a base class and a derived class.
-//Hint: For extra credit, can you demonstrate VTable Smashing?
-class vTableVulnerability{
+//Hint: For extra credit, can you demonstrate VTable Smashing? -- Tried, was unsuccessful, continued to hit
+// errors with modifying various parts of the vtable. It's possible the compiler might not let me.
+class BadObject{
+public:
+    virtual void set_name(string s){
+        sprayable = "All is well";
+        char * data = &(name[0]);
+        for (int i = 0; i < s.length(); ++i) {
+            data[i] = s.at(i);
+        }
+        notify();
+    }
+    void notify(){ //Method exploited.
+        cout << "Your name has been set to " << name << endl;
+        cout << "Have we been sprayed? " << sprayable << endl;
+    }
+private:
+    char name[10];
+    string sprayable;
+};
 
+class Vulnerability: BadObject {
+public:
+    void set_name(string s) override {
+        BadObject::set_name(s);
+    }
 };
 
 void vtableWorking(/* feel free to add parameters */){
-    cout << setw(30) << "Called vtableWorking()";
+    cout << setw(30) << "\n -- Called vtableWorking()" << endl;
+    auto v = new Vulnerability();
 
+    v->set_name("Alexander");
 }
 
 void vTableExploit(/* feel free to add parameters */){
-    cout << setw(30) << "Called vTableExploit()";
+    cout << setw(30) << "\n -- Called vTableExploit()" << endl;
 
+    auto v = new Vulnerability();
+    string s("Hahahahaha       Sprayed!!!");
+    v->set_name(s);
 }
 
 /**************************************
@@ -169,12 +206,12 @@ void stackVulnerability(){
 }
 
 void stackWorking(){
-    cout << setw(30) << "Called stackWorking()";
+    cout << setw(30) << "\n -- Called stackWorking()\n";
 
 }
 
 void stackExploit(){
-    cout << setw(30) << "Called stackExploit()";
+    cout << setw(30) << "\n -- Called stackExploit()\n";
 
 }
 
@@ -187,12 +224,12 @@ void heapVulnerability(/* feel free to add parameters */){
 }
 
 void heapWorking(/* feel free to add parameters */){
-    cout << setw(30) << "Called heapWorking()";
+    cout << setw(30) << "\n -- Called heapWorking()\n";
 
 }
 
 void heapExploit(/* feel free to add parameters */){
-    cout << setw(30) << "Called heapExploit()";
+    cout << setw(30) << "\n -- Called heapExploit()\n";
 
 }
 
@@ -213,14 +250,14 @@ void intVulnerability(int numberInArray){
 }
 
 void integarWorking(){
-    cout << setw(30) << "Called integarWorking()";
+    cout << setw(30) << "\n -- Called integarWorking()\n";
     // This will return a 1 and a J
     intVulnerability(0);
 
 }
 
 void intExploit(/* feel free to add parameters */){
-    cout << setw(30) << "Called intExploit()";
+    cout << setw(30) << "\n -- Called intExploit()\n";
     // This returns a random integer
     intVulnerability(256);
 
@@ -243,14 +280,14 @@ void ansiUnicode(int passwordLength){
 }
 
 void ansiWorking(){
-    cout << setw(30) << "Called ansiWorking()";
+    cout << setw(30) << "\n -- Called ansiWorking()\n";
     // this will check for number of elements
     string testing1 = "This is a test";
     ansiUnicode(testing1.length());
 }
 
 void ansiExploit(){
-    cout << setw(30) << "Called ansiExploit()";
+    cout << setw(30) << "\n -- Called ansiExploit()\n";
     string testing2 = "This is a test";
      // By using the sizeof, we aren't chekcing the length like we're supposed to
     ansiUnicode(sizeof(testing2));
@@ -273,6 +310,9 @@ int main() {
 
     arcWorking();
     arcExploit();
+
+    vtableWorking();
+    vTableExploit();
 
     ansiWorking();
     ansiExploit();
