@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cstring>
 #include <string>
+#include <assert.h>
 
 using namespace std;
 
@@ -87,7 +88,7 @@ void arcVulnerability(istringstream iss)
 
     //Because of this, a different and more blatant vulnerability is written, simulating the above code on the heap.
 
-    char * data = new char[9];
+    const char * data = new char[9];
     *((long*)(data + 1)) = (long)invalid;
     string strTmp;
     iss >> strTmp;
@@ -219,18 +220,29 @@ void stackExploit(){
  * HEAP SPRAYING
  *
  *************************************/
-void heapVulnerability(/* feel free to add parameters */){
-
+void heapVulnerability(){
+   char * buffer1 = new char[4]; 
+   char * buffer2 = new char[4];
+   assert(buffer1 < buffer2); 
+   cin >> buffer1;
+   delete [] buffer2; 
+   delete [] buffer1;
 }
 
 void heapWorking(/* feel free to add parameters */){
     cout << setw(30) << "\n -- Called heapWorking()\n";
+    // This will return 'hola'
+    cout << "Please enter a word of 4 characters or less: ";
+    heapVulnerability();
+    cout << "This does not crash the application";
 
 }
 
 void heapExploit(/* feel free to add parameters */){
     cout << setw(30) << "\n -- Called heapExploit()\n";
-
+    // This crashes the program
+    cout << "Please enter a word of 8 characters or more (This will crash the application): ";
+    heapVulnerability();
 }
 
 /**************************************
@@ -307,6 +319,8 @@ int main() {
     } catch (exception e) {
         cout << e.what();
     }*/
+    heapWorking();
+    heapExploit();
 
     arcWorking();
     arcExploit();
