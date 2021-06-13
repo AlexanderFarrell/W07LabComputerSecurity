@@ -238,47 +238,35 @@ void stackExploit()
  * HEAP SPRAYING
  *
  *************************************/
-void heapVulnerability(int option)
+void heapVulnerability(char input[], int size)
 {
-   if (option == 1)
+   char *buffer1 = new char[4];
+   char *buffer2 = new char[4];
+   assert(buffer1 < buffer2);
+   for (int i = 0; i < size; i++)
    {
-      char input[4] = "Hey";
-      char *buffer1 = new char[4];
-      char *buffer2 = new char[4];
-      assert(buffer1 < buffer2);
-      buffer1 = input;
-      cout << buffer1;
-      delete[] buffer2;
-      delete[] buffer1;
+      buffer1[i] = input[i];
    }
-   else if (option == 2)
-   {
-      char input[20] = "Prepare to crash";
-
-      char *buffer1 = new char[4];
-      char *buffer2 = new char[4];
-      assert(buffer1 < buffer2);
-      buffer1 = input;
-      cout << buffer1;
-      delete[] buffer2;
-      delete[] buffer1;
-   }
+   cout << buffer1;
+   delete[] buffer2;
+   delete[] buffer1;
 }
 
 void heapWorking(/* feel free to add parameters */)
 {
    cout << setw(30) << "\n -- Called heapWorking()\n";
-   // This will return
-   char input[4] = {'h', 'o', 'l', 'a'};
-   heapVulnerability(1);
+   const int size = 4;
+   char input[size] = "Hey";
+   heapVulnerability(input, size);
 }
 
 void heapExploit(/* feel free to add parameters */)
 {
    cout << setw(30) << "\n -- Called heapExploit()\n";
    // This crashes the program
-
-   heapVulnerability(2);
+   const int size = 20;
+   char input[size] = "Prepare to crash";
+   heapVulnerability(input, size);
 }
 
 /**************************************
