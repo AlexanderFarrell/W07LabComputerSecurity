@@ -15,26 +15,26 @@ using namespace std;
  ****************************************/
 void arrayVulnerability(int selection)
 {
-    int cartQuantities[3];
-    cartQuantities[0] = 5;
-    cartQuantities[1] = 2;
-    cartQuantities[2] = 10;
+   int cartQuantities[3];
+   cartQuantities[0] = 5;
+   cartQuantities[1] = 2;
+   cartQuantities[2] = 10;
 
-    string cartNames[3];
-    cartNames[0] = "Apples";
-    cartNames[1] = "Oranges";
-    cartNames[2] = "Bananas";
+   string cartNames[3];
+   cartNames[0] = "Apples";
+   cartNames[1] = "Oranges";
+   cartNames[2] = "Bananas";
 
-
-    //Remove item
-    cartQuantities[selection] -= 1;
-    //Substr added for convenience, as it prints super long otherwise!
-    cout << "\nThere are now " << cartQuantities[selection] << " " << cartNames[selection].substr(0, 60) << endl;
+   //Remove item
+   cartQuantities[selection] -= 1;
+   //Substr added for convenience, as it prints super long otherwise!
+   cout << "\nThere are now " << cartQuantities[selection] << " " << cartNames[selection].substr(0, 60) << endl;
 }
 
-void arrayWorking(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called arrayWorking()";
-    arrayVulnerability(2);
+void arrayWorking(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called arrayWorking()";
+   arrayVulnerability(2);
 }
 
 /**************************************
@@ -47,8 +47,8 @@ void arrayWorking(/* feel free to add parameters */){
  *************************************/
 void arrayExploit()
 {
-    cout << setw(30) << "\n -- Called arrayExploit()";
-    arrayVulnerability(5);
+   cout << setw(30) << "\n -- Called arrayExploit()";
+   arrayVulnerability(5);
 }
 
 /**************************************
@@ -58,68 +58,77 @@ void arrayExploit()
  *         typically happens through a stack buffer vulnerability.
  *  3.  After the memory is overwritten, the function pointer must be dereferenced.
  *************************************/
-void help(){
-    cout << setw(30) <<"Command " << "- quit - Quits \n";
-    cout << setw(30) <<"quit " << " - Quit app \n";
-    cout << setw(30) <<"info " << " - Gets info on app \n";
+void help()
+{
+   cout << setw(30) << "Command "
+        << "- quit - Quits \n";
+   cout << setw(30) << "quit "
+        << " - Quit app \n";
+   cout << setw(30) << "info "
+        << " - Gets info on app \n";
 }
-void quit(){
-    cout << "Quitting!";
+void quit()
+{
+   cout << "Quitting!";
 }
-void info (){
-    cout << "This is an application";
+void info()
+{
+   cout << "This is an application";
 }
-void invalid (){
-    cout << "Not a valid selection";
+void invalid()
+{
+   cout << "Not a valid selection";
 }
-void dangerous(){
-    cout << "Dangerous Called. Should not be called from selections";
+void dangerous()
+{
+   cout << "Dangerous Called. Should not be called from selections";
 }
-typedef void(*func)();
+typedef void (*func)();
 //Hint: This may look something like last week's assignment.
 void arcVulnerability(istringstream iss)
 {
-    //The below code is caught by the debugger, and mitigated. It is similar to the example in the book. It may appear
-    // this was a vulnerability at one point in C++'s history, but modern c++ runtimes catch it.
+   //The below code is caught by the debugger, and mitigated. It is similar to the example in the book. It may appear
+   // this was a vulnerability at one point in C++'s history, but modern c++ runtimes catch it.
 
-    /*char selection[1];
+   /*char selection[1];
     auto command = invalid;
     iss >> selection[1];*/
 
-    //Because of this, a different and more blatant vulnerability is written, simulating the above code on the heap.
+   //Because of this, a different and more blatant vulnerability is written, simulating the above code on the heap.
 
-    const char * data = new char[9];
-    *((long*)(data + 1)) = (long)invalid;
-    string strTmp;
-    iss >> strTmp;
-    data = strTmp.data();
+   const char *data = new char[9];
+   *((long *)(data + 1)) = (long)invalid;
+   string strTmp;
+   iss >> strTmp;
+   data = strTmp.data();
 
-    char selection[1];
-    auto command = *((func *)&data[1]);
-    selection[0] = data[0];
+   char selection[1];
+   auto command = *((func *)&data[1]);
+   selection[0] = data[0];
 
-    switch (selection[0]) {
-        case 'q':
-            command = quit;
-            break;
-        case 'i':
-            command = info;
-            break;
-        case 'h':
-            command = help;
-            break;
-        default:
-            break;
-    }
+   switch (selection[0])
+   {
+   case 'q':
+      command = quit;
+      break;
+   case 'i':
+      command = info;
+      break;
+   case 'h':
+      command = help;
+      break;
+   default:
+      break;
+   }
 
-    command();
-    cout << endl;
+   command();
+   cout << endl;
 }
 
 void arcWorking()
 {
-    cout << setw(30) << "\n -- Called arcWorking()" << endl;
-    arcVulnerability(istringstream("i"));
+   cout << setw(30) << "\n -- Called arcWorking()" << endl;
+   arcVulnerability(istringstream("i"));
 }
 
 /**************************************
@@ -130,15 +139,15 @@ void arcWorking()
  *************************************/
 void arcExploit(/* feel free to add parameters */)
 {
-    cout << setw(30) << "\n -- Called arcExploit()" << endl;
-    string s(".........");// = new char[9];
-    char * c = reinterpret_cast<char *>(&s.at(0));
-    long * l = reinterpret_cast<long *>(&s.at(1));
+   cout << setw(30) << "\n -- Called arcExploit()" << endl;
+   string s("........."); // = new char[9];
+   char *c = reinterpret_cast<char *>(&s.at(0));
+   long *l = reinterpret_cast<long *>(&s.at(1));
 
-    *c = 'u';
-    *l = (long)dangerous;
+   *c = 'u';
+   *l = (long)dangerous;
 
-    arcVulnerability(istringstream(s));
+   arcVulnerability(istringstream(s));
 }
 
 /**************************************
@@ -151,45 +160,54 @@ void arcExploit(/* feel free to add parameters */)
 //Hint: You will need two classes to do this: a base class and a derived class.
 //Hint: For extra credit, can you demonstrate VTable Smashing? -- Tried, was unsuccessful, continued to hit
 // errors with modifying various parts of the vtable. It's possible the compiler might not let me.
-class BadObject{
+class BadObject
+{
 public:
-    virtual void set_name(string s){
-        sprayable = "All is well";
-        char * data = &(name[0]);
-        for (int i = 0; i < s.length(); ++i) {
-            data[i] = s.at(i);
-        }
-        notify();
-    }
-    void notify(){ //Method exploited.
-        cout << "Your name has been set to " << name << endl;
-        cout << "Have we been sprayed? " << sprayable << endl;
-    }
+   virtual void set_name(string s)
+   {
+      sprayable = "All is well";
+      char *data = &(name[0]);
+      for (int i = 0; i < s.length(); ++i)
+      {
+         data[i] = s.at(i);
+      }
+      notify();
+   }
+   void notify()
+   { //Method exploited.
+      cout << "Your name has been set to " << name << endl;
+      cout << "Have we been sprayed? " << sprayable << endl;
+   }
+
 private:
-    char name[10];
-    string sprayable;
+   char name[10];
+   string sprayable;
 };
 
-class Vulnerability: BadObject {
+class Vulnerability : BadObject
+{
 public:
-    void set_name(string s) override {
-        BadObject::set_name(s);
-    }
+   void set_name(string s) override
+   {
+      BadObject::set_name(s);
+   }
 };
 
-void vtableWorking(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called vtableWorking()" << endl;
-    auto v = new Vulnerability();
+void vtableWorking(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called vtableWorking()" << endl;
+   auto v = new Vulnerability();
 
-    v->set_name("Alexander");
+   v->set_name("Alexander");
 }
 
-void vTableExploit(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called vTableExploit()" << endl;
+void vTableExploit(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called vTableExploit()" << endl;
 
-    auto v = new Vulnerability();
-    string s("Hahahahaha       Sprayed!!!");
-    v->set_name(s);
+   auto v = new Vulnerability();
+   string s("Hahahahaha       Sprayed!!!");
+   v->set_name(s);
 }
 
 /**************************************
@@ -202,77 +220,95 @@ void vTableExploit(/* feel free to add parameters */){
 //Hint: Some compilers drop a canary just before the return address. If you overwrite the canary, then the program will
 // terminate with a "stack violation" error message. You can get around this by hopping over the canary using an array
 // index vulnerability.
-void stackVulnerability(){
-
+void stackVulnerability()
+{
 }
 
-void stackWorking(){
-    cout << setw(30) << "\n -- Called stackWorking()\n";
-
+void stackWorking()
+{
+   cout << setw(30) << "\n -- Called stackWorking()\n";
 }
 
-void stackExploit(){
-    cout << setw(30) << "\n -- Called stackExploit()\n";
-
-}
-
-/**************************************
- * HEAP SPRAYING
- *
- *************************************/
-void heapVulnerability(){
-   char * buffer1 = new char[4]; 
-   char * buffer2 = new char[4];
-   assert(buffer1 < buffer2); 
-   cin >> buffer1;
-   delete [] buffer2; 
-   delete [] buffer1;
-}
-
-void heapWorking(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called heapWorking()\n";
-    // This will return 'hola'
-    cout << "Please enter a word of 4 characters or less: ";
-    heapVulnerability();
-    cout << "This does not crash the application";
-
-}
-
-void heapExploit(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called heapExploit()\n";
-    // This crashes the program
-    cout << "Please enter a word of 8 characters or more (This will crash the application): ";
-    heapVulnerability();
+void stackExploit()
+{
+   cout << setw(30) << "\n -- Called stackExploit()\n";
 }
 
 /**************************************
  * HEAP SPRAYING
  *
  *************************************/
-void intVulnerability(int numberInArray){
-    // This give us some bounds that we need to disrupt as per the assignment this is holding credit cards and the corresponding accounts
-    // Let's image they are filled up.
-    char creditcard[254] = {"1"};
-    char account[254] = {"j"};
-    
-    // We take the user input and use it to the corresponding account and credit card number
-    cout << creditcard[numberInArray] << endl;
-    cout << account[numberInArray] << endl;
-    
+void heapVulnerability(int option)
+{
+   if (option == 1)
+   {
+      char input[4] = "Hey";
+      char *buffer1 = new char[4];
+      char *buffer2 = new char[4];
+      assert(buffer1 < buffer2);
+      buffer1 = input;
+      cout << buffer1;
+      delete[] buffer2;
+      delete[] buffer1;
+   }
+   else if (option == 2)
+   {
+      char input[20] = "Prepare to crash";
+
+      char *buffer1 = new char[4];
+      char *buffer2 = new char[4];
+      assert(buffer1 < buffer2);
+      buffer1 = input;
+      cout << buffer1;
+      delete[] buffer2;
+      delete[] buffer1;
+   }
 }
 
-void integarWorking(){
-    cout << setw(30) << "\n -- Called integarWorking()\n";
-    // This will return a 1 and a J
-    intVulnerability(0);
-
+void heapWorking(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called heapWorking()\n";
+   // This will return
+   char input[4] = {'h', 'o', 'l', 'a'};
+   heapVulnerability(1);
 }
 
-void intExploit(/* feel free to add parameters */){
-    cout << setw(30) << "\n -- Called intExploit()\n";
-    // This returns a random integer
-    intVulnerability(256);
+void heapExploit(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called heapExploit()\n";
+   // This crashes the program
 
+   heapVulnerability(2);
+}
+
+/**************************************
+ * HEAP SPRAYING
+ *
+ *************************************/
+void intVulnerability(int numberInArray)
+{
+   // This give us some bounds that we need to disrupt as per the assignment this is holding credit cards and the corresponding accounts
+   // Let's image they are filled up.
+   char creditcard[254] = {"1"};
+   char account[254] = {"j"};
+
+   // We take the user input and use it to the corresponding account and credit card number
+   cout << creditcard[numberInArray] << endl;
+   cout << account[numberInArray] << endl;
+}
+
+void integarWorking()
+{
+   cout << setw(30) << "\n -- Called integarWorking()\n";
+   // This will return a 1 and a J
+   intVulnerability(0);
+}
+
+void intExploit(/* feel free to add parameters */)
+{
+   cout << setw(30) << "\n -- Called intExploit()\n";
+   // This returns a random integer
+   intVulnerability(256);
 }
 
 /**************************************
@@ -281,53 +317,61 @@ void intExploit(/* feel free to add parameters */){
  *************************************/
 
 // Get this where the number we loop on is the one received. The size off will ruin it.ß
-void ansiUnicode(int passwordLength){
-    string realPasswordLength = "This is a test";
-    if (realPasswordLength.size() == passwordLength){
-        cout << "Password matches" << endl;
-    }
-    else{
-        cout << "wrong password"  << endl;
-    }
+void ansiUnicode(int passwordLength)
+{
+   string realPasswordLength = "This is a test";
+   if (realPasswordLength.size() == passwordLength)
+   {
+      cout << "Password matches" << endl;
+   }
+   else
+   {
+      cout << "wrong password" << endl;
+   }
 }
 
-void ansiWorking(){
-    cout << setw(30) << "\n -- Called ansiWorking()\n";
-    // this will check for number of elements
-    string testing1 = "This is a test";
-    ansiUnicode(testing1.length());
+void ansiWorking()
+{
+   cout << setw(30) << "\n -- Called ansiWorking()\n";
+   // this will check for number of elements
+   string testing1 = "This is a test";
+   ansiUnicode(testing1.length());
 }
 
-void ansiExploit(){
-    cout << setw(30) << "\n -- Called ansiExploit()\n";
-    string testing2 = "This is a test";
-     // By using the sizeof, we aren't chekcing the length like we're supposed to
-    ansiUnicode(sizeof(testing2));
-
+void ansiExploit()
+{
+   cout << setw(30) << "\n -- Called ansiExploit()\n";
+   string testing2 = "This is a test";
+   // By using the sizeof, we aren't chekcing the length like we're supposed to
+   ansiUnicode(sizeof(testing2));
 }
 
 /**************************************
  * MAIN
  *
  *************************************/
-int main() {
-    arrayWorking();
-    arrayExploit();
-    /*try {
+int main()
+{
+   arrayWorking();
+   arrayExploit();
+   /*try {
         arrayWorking();
         arrayExploit();
     } catch (exception e) {
         cout << e.what();
     }*/
-    heapWorking();
-    heapExploit();
+   heapWorking();
+   heapExploit();
 
-    arcWorking();
-    arcExploit();
+   arcWorking();
+   arcExploit();
 
-    vtableWorking();
-    vTableExploit();
+   vtableWorking();
+   vTableExploit();
 
-    ansiWorking();
-    ansiExploit();
+   integarWorking();
+   intExploit();
+
+   ansiWorking();
+   ansiExploit();
 }
