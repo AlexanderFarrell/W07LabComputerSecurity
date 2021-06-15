@@ -220,18 +220,31 @@ void vTableExploit(/* feel free to add parameters */)
 //Hint: Some compilers drop a canary just before the return address. If you overwrite the canary, then the program will
 // terminate with a "stack violation" error message. You can get around this by hopping over the canary using an array
 // index vulnerability.
-void stackVulnerability()
+void stackVulnerability(char *text)
 {
+   
+   cout << "Enter your text: ";
+   cin >> text;   //N validation on buffer size
+   cin.ignore(1,'\n'); //a large amount of characters will cause a fatal error.
+     
 }
 
 void stackWorking()
 {
    cout << setw(30) << "\n -- Called stackWorking()\n";
+
+   char text[10];
+   stackVulnerability(text);
+
 }
 
 void stackExploit()
 {
    cout << setw(30) << "\n -- Called stackExploit()\n";
+
+   char badText[10];
+   cout << setw(20) << "Time to insert a large amount of characters...\n";
+   stackVulnerability(badText); 
 }
 
 /**************************************
@@ -362,4 +375,7 @@ int main()
 
    ansiWorking();
    ansiExploit();
+
+   stackWorking();
+   stackExploit();
 }
